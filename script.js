@@ -35,7 +35,7 @@ tasksContainer.addEventListener('click', e => {
 
 clearCompleteTasksButton.addEventListener('click', e => {
     const selectedList = lists.find(list => list.id === selectedListId)
-    selectedList.tasks = selectedList.task.filter(task => !task.complete)
+    selectedList.tasks = selectedList.tasks.filter(task => !task.complete)
     saveAndRender()
 })
 
@@ -92,12 +92,13 @@ function render() {
     clearElement(listsContainer)
     renderLists()
 
-    const selectedList = lists.find(list.id === selectedListId)
+    const selectedList = lists.find(list => list.id === selectedListId)
+    console.log(selectedList);
     if (selectedListId == null) {
         listDisplayContainer.style.display = 'none'
     } else {
         listDisplayContainer.style.display = ''
-        listTitleElement.innerText = selectedListId.name
+        listTitleElement.innerText = selectedList.name
         renderTaskCount(selectedList)
         clearElement(tasksContainer)
         renderTasks(selectedList)
@@ -118,7 +119,7 @@ function renderTasks(selectedList) {
 }
 
 function renderTaskCount(selectedList) {
-    const incompleteTasks = selectedList.tasks.filter(task => task.complete).length
+    const incompleteTaskCount = selectedList.tasks.filter(task => !task.complete).length
     const taskString = incompleteTaskCount === 1 ? "task" : "tasks"
     listCountElement.innerText = `${incompleteTaskCount} ${taskString} remaining`
 }
@@ -128,7 +129,7 @@ function renderLists() {
         const listElement = document.createElement('li');
         listElement.dataset.listId = list.id
         listElement.classList.add("list-name")
-        listElement.innerText = list
+        listElement.innerText = list.name
         if (list.id === selectedListId) {
             listElement.classList.add('active-list')
         }
